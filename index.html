@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home / Curtis Botting</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="content">
+        <div class="namecard">
+            <h1>Curtis Botting</h1>
+            <div id="jobtitle">
+                <h3>FULL-STACK WEB DEVELOPER</h3>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+(() => {
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height, dpr;
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // --- CONFIG ---
+  const NUM_PARTICLES = width;
+  const PARTICLE_SIZE = 1.2;
+  const ATTRACTION_RADIUS = 10;
+  const COHESION = 0.02; //how much they clump
+  const REPULSION = 0.06; //how strongly they push away
+  const FRICTION = 0.93; // how quickly they stop in the air
+  const MOUSE_FORCE = 0.0045; // how strong da mouse is
+  const CENTER_FORCE = 0.000015; // how strongly particles are drawn toward center
+  const MAX_SPEED = 1.2;
+
+  const particles = [];
+  const mouse = { x: 0, y: 0, active: false };
+
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    particles.push({
+      x: Math.random() * width / 2 + (width/4),
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 1.0,
+      vy: (Math.random() - 0.5) * 1.0,
+    });
+  }
+
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  });
+  window.addEventListener('mouseleave', () => mouse.active = false);
+
+  function update() {
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      let ax = 0;
+      let ay = 0;
+
+      // --- local clumping ---
+      for (let j = 0; j < particles.length; j++) {
+        if (i === j) continue;
+        const q = particles[j];
+        const dx = q.x - p.x;
+        const dy = q.y - p.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < ATTRACTION_RADIUS) {
+          ax += dx * COHESION;
+          ay += dy * COHESION;
+          if (dist < 20) {
+            ax -= dx * REPULSION;
+            ay -= dy * REPULSION;
+          }
+        }
+      }
+
+      // --- attraction to center ---
+      const dxC = centerX - p.x;
+      const dyC = centerY - p.y;
+      ax += dxC * CENTER_FORCE;
+      ay += dyC * CENTER_FORCE;
+
+      // --- mouse push (anti-gravity) ---
+      if (mouse.active) {
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist2 = dx*dx + dy*dy;
+        if (dist2 < 300*300) {
+          const force = MOUSE_FORCE / (dist2 * 0.001 + 1);
+          ax += dx * force;
+          ay += dy * force;
+        }
+      }
+
+      // integrate motion
+      p.vx = (p.vx + ax) * FRICTION;
+      p.vy = (p.vy + ay) * FRICTION;
+
+      // limit velocity
+      const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+      if (spd > MAX_SPEED) {
+        p.vx = (p.vx / spd) * MAX_SPEED;
+        p.vy = (p.vy / spd) * MAX_SPEED;
+      }
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // wrap edges
+      if (p.x < 0) p.x = width;
+      if (p.x > width) p.x = 0;
+      if (p.y < 0) p.y = height;
+      if (p.y > height) p.y = 0;
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "#111";
+    for (const p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, PARTICLE_SIZE, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function animate() {
+    update();
+    draw();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+})();
+</script>
+</body>
+</html>
