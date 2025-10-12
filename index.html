@@ -9,13 +9,20 @@
 <body>
     <canvas id="canvas"></canvas>
 
-    <div class="content">
+    <div class="content home">
         <div class="namecard">
             <h1>Curtis Botting</h1>
             <div id="jobtitle">
                 <h3>FULL-STACK WEB DEVELOPER</h3>
             </div>
         </div>
+        <nav>
+          <ul>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a>PROJECTS</a></li>
+            <li><a>CONTACT</a></li>
+          </ul>
+        </nav>
     </div>
 
 
@@ -52,8 +59,8 @@
 
   for (let i = 0; i < NUM_PARTICLES; i++) {
     particles.push({
-      x: Math.random() * width / 2 + (width/4),
-      y: Math.random() * height,
+      x: Math.random() * width,
+      y: Math.random() * height / 2 + (height/4),
       vx: (Math.random() - 0.5) * 1.0,
       vy: (Math.random() - 0.5) * 1.0,
     });
