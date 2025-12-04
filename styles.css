@@ -9,8 +9,8 @@
     background-color: #f8f7f3; /* off-white background */
     height: 100%;
     color:#181717;
-    background: linear-gradient(45deg,#f8f7f3,#9b9292, #f8f7f3);
-     background-attachment: fixed;
+    background: linear-gradient(45deg,#9b9292,#f8f7f3, #9b9292);
+    background-attachment: fixed;
   }
   canvas {
     position: absolute;
@@ -27,41 +27,42 @@
   border: #181717 dashed 1px;
   font-family: 'Noto Sans Mono';
   padding: 10px;
-}
-
-  .home {
   display:flex;
   justify-content: space-between;
   }
 
+  a:hover {
+    color:crimson;
+  }
+
   .content h2 {
     font-family: 'Poiret One'; 
-    font-size:3em;
+    font-size:48px;
     font-weight: 500;
   }
 
   .namecard {
-    line-height: 0;
+    margin-top:-50px;
     padding:10px;
   }
 
   .namecard h1 {
-    font-size: 3em;
+    font-size: 48px;
     font-weight: 400;
+    margin-bottom:0px;
   }
 
   #jobtitle {
     background-color: #181717;
     color:#f8f7f3;
-    padding:1px 4em 1px 1em;
+    padding:1px 4em 1px 24px;
     font-family: 'Google Sans Code';
-    font-size:0.75em;
     width:fit-content;
-    font-weight: 200;
   }
 
   #jobtitle h3 {
-        font-weight: 200;
+    font-weight: 200;
+    font-size:24px;
   }
 
   nav ul{
@@ -87,18 +88,114 @@
     .home{
       flex-direction: column;
       align-items: center;
+      text-align: center;
     }
+
+    #jobtitle {
+      padding:1px;
+    }
+
     nav ul  li{
       text-align: center;
       padding:0;
     }
   }
 
-  .about {
+  .content {
   margin: 2.5%;
   border-radius: 1em;
   border: #181717 dashed 1px;
   font-family: 'Noto Sans Mono';
-  padding: 10px;
-  margin-bottom:2.5%;
-}
+  padding: 50px;
+  }
+
+  .proj-display {
+    display:flex;
+    background-color:#f1e5e56b;
+    border-radius: 2em;
+    overflow:hidden;
+    border:1px #9b9292 dashed;
+    margin-bottom:10px;
+  }
+
+  .proj-text {
+    width:70%;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    padding:20px;
+  }
+
+  .proj-gallery {
+    width:30%;
+    max-width:600px;
+    display:flex;
+    justify-content: end;
+  }
+
+  .proj-gallery img{
+    width:100%
+  }
+
+  .contactsheet {
+    width:100%;
+    display:flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .contactsheet a {
+    color:#181717;
+  }
+
+  .contactsheet a:hover {
+    color:crimson;
+    transition: 0.2s ease-in-out;
+    scale:1.1;
+  }
+
+  .linkedin-card img{
+    height:200px;
+    margin-bottom:-20px;
+  }
+
+  .linkedin-card {
+    text-align: center;
+  }
+
+  .linkedin-card:hover {
+    transition: 0.2s ease-in-out;
+    scale:1.1;
+  }
+
+  /*mobile preview*/
+
+  .mobile-preview {
+    display:none;
+  }
+
+  @media screen and (max-width:750px) {
+    .desktop-preview {
+      display:none;
+    }
+
+    .mobile-preview {
+      display:block;
+    }
+
+    .proj-text {
+      width:90%;
+    }
+
+    .proj-gallery {
+    width:100%
+    }
+
+    .proj-display {
+      flex-direction: column;
+    }
+
+    .contactsheet {
+      flex-direction: column;
+    }
+  }
